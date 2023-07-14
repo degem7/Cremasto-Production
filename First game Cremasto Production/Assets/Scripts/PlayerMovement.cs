@@ -9,6 +9,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float jumpForce;
 
     private Rigidbody2D rigidbody;
+    private bool isGrounded;
     private float movementX;
     private float movementY;
 
@@ -17,9 +18,26 @@ public class PlayerMovement : MonoBehaviour
         rigidbody = GetComponent<Rigidbody2D>();
     }
 
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Floor"))
+        {
+            isGrounded = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if(collision.gameObject.CompareTag("Floor"))
+        {
+            isGrounded = false;
+        }
+    }
+
     private void OnJump()
     {
-        movementY = jumpForce;
+        if(isGrounded == true)
+            movementY = jumpForce;
     }
 
     private void OnMove(InputValue movementValue)
